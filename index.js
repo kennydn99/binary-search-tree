@@ -8,20 +8,86 @@ class Node {
 
 class Tree {
   constructor(array) {
-    this.root = buildTree(array);
+    this.root = this.buildTree(array);
+  }
+
+  buildTree(array, start = 0, end = array.length - 1) {
+    if (start > end) return null;
+    const mid = Math.floor((start + end) / 2);
+    const root = new Node(array[mid]);
+
+    root.left = this.buildTree(array, start, mid - 1);
+    root.right = this.buildTree(array, mid + 1, end);
+
+    return root;
+  }
+
+  insert(value) {
+    // Implementation of insert method
+    if (!this.root) {
+      this.root = new Node(value);
+      return;
+    }
+
+    const insertNode = (root, value) => {
+      if (!root) return new Node(value);
+
+      if (root.data === value) return root;
+
+      if (value < root.data) {
+        root.left = insertNode(root.left, value);
+      } else {
+        root.right = insertNode(root.right, value);
+      }
+
+      return root;
+    };
+
+    this.root = insertNode(this.root, value);
+  }
+
+  deleteItem(value) {
+    // delete leaf
+    // delete node with single child
+    // delete node with two children
+  }
+
+  find(value) {
+    // Implementation of find method
+  }
+
+  levelOrder(callback) {
+    // Implementation of levelOrder traversal
+  }
+
+  inOrder(callback) {
+    // Implementation of inOrder traversal
+  }
+
+  preOrder(callback) {
+    // Implementation of preOrder traversal
+  }
+
+  postOrder(callback) {
+    // Implementation of postOrder traversal
+  }
+
+  height(node) {
+    // Implementation of height method
+  }
+
+  depth(node) {
+    // Implementation of depth method
+  }
+
+  isBalanced() {
+    // Implementation of isBalanced method
+  }
+
+  rebalance() {
+    // Implementation of rebalance method
   }
 }
-
-const buildTree = (array, start = 0, end = array.length - 1) => {
-  if (start > end) return null;
-  const mid = Math.floor((start + end) / 2);
-  const root = new Node(array[mid]);
-
-  root.left = buildTree(array, start, mid - 1);
-  root.right = buildTree(array, mid + 1, end);
-
-  return root;
-};
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
@@ -36,29 +102,12 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-const insert = (value) => {};
-
-const deleteItem = (value) => {};
-
-const find = (value) => {};
-
-const levelOrder = (callback) => {};
-
-const inOrder = (callback) => {};
-
-const preOrder = (callback) => {};
-
-const postOrder = (callback) => {};
-
-const height = (node) => {};
-
-const depth = (node) => {};
-
-const isBalanced = () => {};
-
-const rebalance = () => {};
-
 // testing
-const bst = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
-// console.log(bst);
+const bst = new Tree([10, 20, 30, 100, 500]);
+
+bst.insert(40);
+bst.insert(5);
+bst.insert(450);
+bst.insert(451);
+
 prettyPrint(bst.root);

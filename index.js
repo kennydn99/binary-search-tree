@@ -1,3 +1,4 @@
+// Node class representing each element of the Tree
 class Node {
   constructor(data = null, left = null, right = null) {
     this.data = data;
@@ -6,31 +7,38 @@ class Node {
   }
 }
 
+// Tree class representing Binary Search Tree data structure of Nodes
 class Tree {
+  // Initializes the Tree with the buildTree method
   constructor(array) {
-    this.root = this.buildTree(array);
+    if (array.length === 0) {
+      this.root = null;
+    } else {
+      this.root = this.buildTree(array);
+    }
   }
-
+  // recursive method that creates balanced binary search tree given an ordered array
   buildTree(array, start = 0, end = array.length - 1) {
     if (start > end) return null;
     const mid = Math.floor((start + end) / 2);
     const root = new Node(array[mid]);
-
     root.left = this.buildTree(array, start, mid - 1);
     root.right = this.buildTree(array, mid + 1, end);
 
     return root;
   }
 
+  // Inserts a given value into the tree maintaining the existing tree structure
   insert(value) {
-    // Implementation of insert method
-    if (!this.root) {
+    // Check if root is null/the tree is empty, if true create new Node and set as root
+    if (this.root === null) {
       this.root = new Node(value);
       return;
     }
 
+    // Recursive helper function that traverses the tree in order to insert the new value
     const insertNode = (root, value) => {
-      if (!root) return new Node(value);
+      if (root === null) return new Node(value);
 
       if (root.data === value) return root;
 
@@ -44,12 +52,6 @@ class Tree {
     };
 
     this.root = insertNode(this.root, value);
-  }
-
-  deleteItem(value) {
-    // delete leaf
-    // delete node with single child
-    // delete node with two children
   }
 
   find(value) {
@@ -93,6 +95,11 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
   }
+
+  if (node === undefined) {
+    console.log("This node is undefined", node);
+  }
+
   if (node.right !== null) {
     prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
   }
@@ -102,12 +109,12 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-// testing
-const bst = new Tree([10, 20, 30, 100, 500]);
+// Testing with simple cases
+const bst1 = new Tree([10, 20, 30]); // Should create a small tree
+bst1.insert(1);
+bst1.insert(25);
 
-bst.insert(40);
-bst.insert(5);
-bst.insert(450);
-bst.insert(451);
+prettyPrint(bst1.root); // Should print a single node
 
-prettyPrint(bst.root);
+const bst2 = new Tree([5]); // Single node tree
+prettyPrint(bst2.root); // Should print a single node

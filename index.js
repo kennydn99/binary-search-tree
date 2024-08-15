@@ -53,6 +53,37 @@ class Tree {
 
     this.root = insertNode(this.root, value);
   }
+  // helper function to find in order successor needed in deleteItem (next biggest node that the node to delete)
+  getSuccessor(node) {
+    node = node.right;
+    while (node !== null && node.left !== null) {
+      node = node.left;
+    }
+    return node;
+  }
+
+  deleteItem(root, value) {
+    if (root === null) return root;
+
+    if (value < root.data) {
+      root.left = this.deleteItem(root.left, value);
+    } else if (value > root.data) {
+      root.right = this.deleteItem(root.right, value);
+    } else {
+      if (root.left === null) {
+        return root.right;
+      }
+
+      if (root.right === null) {
+        return root.left;
+      }
+
+      let successor = this.getSuccessor(root);
+      root.data = successor.data;
+      root.right = this.deleteItem(root.right, successor.data);
+    }
+    return root;
+  }
 
   find(value) {
     // Implementation of find method
@@ -110,11 +141,17 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // Testing with simple cases
-const bst1 = new Tree([10, 20, 30]); // Should create a small tree
+const bst1 = new Tree([10, 20, 30, 40, 50, 60, 70, 80]); // Should create a small tree
 bst1.insert(1);
 bst1.insert(25);
+bst1.insert(15);
 
-prettyPrint(bst1.root); // Should print a single node
+prettyPrint(bst1.root);
+// console.log("Deleting 20....");
+// bst1.deleteItem(bst1.root, 30);
+bst1.deleteItem(bst1.root, 20);
 
-const bst2 = new Tree([5]); // Single node tree
-prettyPrint(bst2.root); // Should print a single node
+prettyPrint(bst1.root);
+
+// const bst2 = new Tree([5]); // Single node tree
+// prettyPrint(bst2.root); // Should print a single node

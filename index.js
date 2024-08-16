@@ -102,6 +102,23 @@ class Tree {
 
   levelOrder(callback) {
     // Implementation of levelOrder traversal
+    if (callback === null) {
+      throw new Error("Please provide callback");
+    }
+    if (this.root === null) return;
+
+    let queue = [];
+
+    // start at root and call callback(root)
+    queue.push(this.root);
+    // go to next level (left then right)
+    while (queue.length > 0) {
+      let removedNode = queue.shift();
+      callback(removedNode);
+      if (removedNode.left !== null) queue.push(removedNode.left);
+      if (removedNode.right !== null) queue.push(removedNode.right);
+    }
+    console.log("levelOrder traversal done!");
   }
 
   inOrder(callback) {
@@ -158,12 +175,18 @@ bst1.insert(25);
 bst1.insert(15);
 
 prettyPrint(bst1.root);
-// console.log("Deleting 20....");
-// bst1.deleteItem(bst1.root, 30);
+console.log("Deleting 20....");
+bst1.deleteItem(bst1.root, 30);
 bst1.deleteItem(bst1.root, 20);
 console.log("finding 10: ", bst1.find(10));
-
 prettyPrint(bst1.root);
+bst1.levelOrder((node) => {
+  console.log(node.data);
+});
 
-// const bst2 = new Tree([5]); // Single node tree
-// prettyPrint(bst2.root); // Should print a single node
+const bst2 = new Tree([5, 10, 15]);
+prettyPrint(bst2.root);
+
+bst2.levelOrder((node) => {
+  console.log(node.data);
+});

@@ -87,6 +87,17 @@ class Tree {
 
   find(value) {
     // Implementation of find method
+    let currNode = this.root;
+    while (currNode !== null) {
+      if (value === currNode.data) {
+        return currNode;
+      } else if (value < currNode.data) {
+        currNode = currNode.left;
+      } else {
+        currNode = currNode.right;
+      }
+    }
+    return null;
   }
 
   levelOrder(callback) {
@@ -150,6 +161,7 @@ prettyPrint(bst1.root);
 // console.log("Deleting 20....");
 // bst1.deleteItem(bst1.root, 30);
 bst1.deleteItem(bst1.root, 20);
+console.log("finding 10: ", bst1.find(10));
 
 prettyPrint(bst1.root);
 

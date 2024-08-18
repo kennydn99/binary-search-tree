@@ -102,8 +102,8 @@ class Tree {
 
   levelOrder(callback) {
     // Implementation of levelOrder traversal
-    if (callback === null) {
-      throw new Error("Please provide callback");
+    if (typeof callback !== "function") {
+      throw new Error("Please provide a valid callback function");
     }
     if (this.root === null) return;
 
@@ -118,19 +118,45 @@ class Tree {
       if (removedNode.left !== null) queue.push(removedNode.left);
       if (removedNode.right !== null) queue.push(removedNode.right);
     }
-    console.log("levelOrder traversal done!");
   }
 
-  inOrder(callback) {
+  inOrder(callback, node = this.root) {
     // Implementation of inOrder traversal
+    // left - root - right
+    if (typeof callback !== "function") {
+      throw new Error("Please provide a valid callback function");
+    }
+    if (node === null) return;
+
+    this.inOrder(callback, node.left);
+    callback(node);
+    this.inOrder(callback, node.right);
   }
 
-  preOrder(callback) {
+  preOrder(callback, node = this.root) {
     // Implementation of preOrder traversal
+    // root - left - right
+    if (typeof callback !== "function") {
+      throw new Error("Please provide a valid callback function");
+    }
+    if (node === null) return;
+
+    callback(node);
+    this.preOrder(callback, node.left);
+    this.preOrder(callback, node.right);
   }
 
-  postOrder(callback) {
+  postOrder(callback, node = this.root) {
     // Implementation of postOrder traversal
+    // left - right - root
+    if (typeof callback !== "function") {
+      throw new Error("Please provide a valid callback function");
+    }
+    if (node === null) return;
+
+    this.postOrder(callback, node.left);
+    this.postOrder(callback, node.right);
+    callback(node);
   }
 
   height(node) {
@@ -180,13 +206,36 @@ bst1.deleteItem(bst1.root, 30);
 bst1.deleteItem(bst1.root, 20);
 console.log("finding 10: ", bst1.find(10));
 prettyPrint(bst1.root);
+
+console.log("Level Order Traversal...");
 bst1.levelOrder((node) => {
   console.log(node.data);
 });
+prettyPrint(bst1.root);
 
-const bst2 = new Tree([5, 10, 15]);
-prettyPrint(bst2.root);
+console.log("InOrder Traversal...");
 
-bst2.levelOrder((node) => {
+bst1.inOrder((node) => {
   console.log(node.data);
 });
+prettyPrint(bst1.root);
+
+console.log("PreOrder Traversal...");
+
+bst1.preOrder((node) => {
+  console.log(node.data);
+});
+prettyPrint(bst1.root);
+
+console.log("Post Order Traversal...");
+
+bst1.postOrder((node) => {
+  console.log(node.data);
+});
+
+// const bst2 = new Tree([5, 10, 15]);
+// prettyPrint(bst2.root);
+
+// bst2.levelOrder((node) => {
+//   console.log(node.data);
+// });

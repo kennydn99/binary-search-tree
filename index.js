@@ -161,10 +161,28 @@ class Tree {
 
   height(node) {
     // Implementation of height method
+    if (node === null) return -1;
+    let leftHeight = this.height(node.left);
+    let rightHeight = this.height(node.right);
+    return Math.max(leftHeight, rightHeight) + 1;
   }
 
   depth(node) {
     // Implementation of depth method
+    if (node === null) return -1;
+    let edges = 0;
+    let currNode = this.root;
+    while (currNode != null) {
+      if (node.data < currNode.data) {
+        currNode = currNode.left;
+        edges++;
+      } else if (node.data > currNode.data) {
+        currNode = currNode.right;
+        edges++;
+      } else {
+        return edges;
+      }
+    }
   }
 
   isBalanced() {
@@ -233,9 +251,13 @@ bst1.postOrder((node) => {
   console.log(node.data);
 });
 
-// const bst2 = new Tree([5, 10, 15]);
-// prettyPrint(bst2.root);
+prettyPrint(bst1.root);
+console.log("height of root: ", bst1.height(bst1.find(40)));
+console.log("depth of node: ", bst1.depth(bst1.find(80)));
 
-// bst2.levelOrder((node) => {
-//   console.log(node.data);
-// });
+const bst2 = new Tree([5, 10, 15, 30]);
+prettyPrint(bst2.root);
+
+bst2.levelOrder((node) => {
+  console.log(node.data);
+});

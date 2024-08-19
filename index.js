@@ -183,14 +183,32 @@ class Tree {
         return edges;
       }
     }
+    return -1;
   }
 
-  isBalanced() {
+  //  A balanced tree is one where the difference
+  // between heights of the left subtree and the right subtree of every node is not more than 1.
+  isBalanced(node = this.root) {
     // Implementation of isBalanced method
+    if (node === null) return true;
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+
+    const heightDiff = Math.abs(leftHeight - rightHeight) <= 1;
+
+    return (
+      heightDiff && this.isBalanced(node.left) && this.isBalanced(node.right)
+    );
   }
 
   rebalance() {
     // Implementation of rebalance method
+    const sortedArr = [];
+    this.inOrder((node) => {
+      sortedArr.push(node.data);
+    });
+
+    this.root = this.buildTree(sortedArr);
   }
 }
 
@@ -212,52 +230,85 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-// Testing with simple cases
-const bst1 = new Tree([10, 20, 30, 40, 50, 60, 70, 80]); // Should create a small tree
-bst1.insert(1);
-bst1.insert(25);
-bst1.insert(15);
+const randomNumArray = (size) => {
+  let array = [];
 
-prettyPrint(bst1.root);
-console.log("Deleting 20....");
-bst1.deleteItem(bst1.root, 30);
-bst1.deleteItem(bst1.root, 20);
-console.log("finding 10: ", bst1.find(10));
-prettyPrint(bst1.root);
+  while (array.length < size) {
+    let randomNumber = Math.floor(Math.random() * 100);
+    if (!array.includes(randomNumber)) {
+      array.push(randomNumber);
+    }
+  }
+
+  array.sort((a, b) => a - b); // Sort the array in ascending order
+  return array;
+};
+
+// Testing
+console.log("TESTING...");
+console.log(
+  "Creating Binary Search Tree from array of random numbers < 100..."
+);
+
+const myArray = randomNumArray(6);
+console.log("Random Number Array:", myArray);
+
+const bst = new Tree(myArray);
+prettyPrint(bst.root);
+
+console.log("Is the tree balanced? ", bst.isBalanced());
 
 console.log("Level Order Traversal...");
-bst1.levelOrder((node) => {
+bst.levelOrder((node) => {
   console.log(node.data);
 });
-prettyPrint(bst1.root);
-
-console.log("InOrder Traversal...");
-
-bst1.inOrder((node) => {
-  console.log(node.data);
-});
-prettyPrint(bst1.root);
 
 console.log("PreOrder Traversal...");
-
-bst1.preOrder((node) => {
+bst.preOrder((node) => {
   console.log(node.data);
 });
-prettyPrint(bst1.root);
+
+console.log("InOrder Traversal...");
+bst.inOrder((node) => {
+  console.log(node.data);
+});
 
 console.log("Post Order Traversal...");
-
-bst1.postOrder((node) => {
+bst.postOrder((node) => {
   console.log(node.data);
 });
 
-prettyPrint(bst1.root);
-console.log("height of root: ", bst1.height(bst1.find(40)));
-console.log("depth of node: ", bst1.depth(bst1.find(80)));
+console.log("Unbalancing tree...");
+bst.insert(123);
+bst.insert(420);
+bst.insert(158);
+bst.insert(246);
 
-const bst2 = new Tree([5, 10, 15, 30]);
-prettyPrint(bst2.root);
+prettyPrint(bst.root);
+console.log("Is the tree balanced? ", bst.isBalanced());
 
-bst2.levelOrder((node) => {
+console.log("Rebalancing tree...");
+bst.rebalance();
+prettyPrint(bst.root);
+
+console.log("Is the tree balanced? ", bst.isBalanced());
+
+console.log("Level Order Traversal...");
+bst.levelOrder((node) => {
+  console.log(node.data);
+});
+
+console.log("PreOrder Traversal...");
+bst.preOrder((node) => {
+  console.log(node.data);
+});
+
+console.log("InOrder Traversal...");
+bst.inOrder((node) => {
+  console.log(node.data);
+});
+
+console.log("Post Order Traversal...");
+bst.postOrder((node) => {
   console.log(node.data);
 });
